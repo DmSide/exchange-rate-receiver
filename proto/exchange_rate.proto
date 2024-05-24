@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package exchange_rate;
+
+option go_package = "exchange-rate-receiver/proto";
+
+service ExchangeRateService {
+  rpc GetRates (GetRatesRequest) returns (GetRatesResponse);
+  rpc Healthcheck (HealthcheckRequest) returns (HealthcheckResponse);
+}
+
+message GetRatesRequest {}
+
+message GetRatesResponse {
+  double ask = 1;
+  double bid = 2;
+  string timestamp = 3;
+}
+
+message HealthcheckRequest {}
+
+message HealthcheckResponse {
+  string status = 1;
+}
