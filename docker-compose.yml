@@ -1,0 +1,34 @@
+networks:
+  internal:
+    name: conn
+    driver: bridge
+
+services:
+  app:
+    build: .
+    networks:
+      - internal
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - "50051:50051"
+    command: ["/exchange-rate-receiver"]
+
+  db:
+    image: postgres
+    networks:
+      - internal
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: exchangerates
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+volumes:
+  db_data:

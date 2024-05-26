@@ -1,1 +1,7 @@
 /go.sum
+/bin/
+/pkg/
+/vendor/
+*.log
+.env
+/exchange_rate-receiver

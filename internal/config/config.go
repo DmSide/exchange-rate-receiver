@@ -11,23 +11,20 @@ type Config struct {
 }
 
 func LoadConfig() (*Config, error) {
-	viper.SetConfigName("config") // name of config file (without extension)
-	viper.SetConfigType("yaml")   // required if the config file does not have the extension in the name
-	viper.AddConfigPath(".")      // optionally look for config in the working directory
-	viper.AutomaticEnv()          // read in environment variables that match
+	logger, _ := zap.NewProduction()
 
-	viper.SetDefault("GRPCPort", "50051") // default value for GRPC port
+	viper.BindEnv("GRPC_PORT")
+	viper.BindEnv("DATABASE_URL")
 
-	if err := viper.ReadInConfig(); err != nil {
-		// TODO: Add special name here
-		logger, _ := zap.NewProduction()
-		logger.Warn("No config file found", zap.Error(err))
-	}
+	viper.AutomaticEnv()
 
 	var cfg Config
 	if err := viper.Unmarshal(&cfg); err != nil {
 		return nil, err
 	}
+
+	// Please remove it for PROD
+	logger.Info("Configuration loaded", zap.String("GRPC_PORT", cfg.GRPCPort), zap.String("DATABASE_URL", cfg.DatabaseURL))
 
 	return &cfg, nil
 }
