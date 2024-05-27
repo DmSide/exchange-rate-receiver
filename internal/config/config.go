@@ -13,8 +13,12 @@ type Config struct {
 func LoadConfig() (*Config, error) {
 	logger, _ := zap.NewProduction()
 
-	viper.BindEnv("GRPC_PORT")
-	viper.BindEnv("DATABASE_URL")
+	if err := viper.BindEnv("GRPC_PORT"); err != nil {
+		return nil, err
+	}
+	if err := viper.BindEnv("DATABASE_URL"); err != nil {
+		return nil, err
+	}
 
 	viper.AutomaticEnv()
 

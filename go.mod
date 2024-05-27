@@ -1,14 +1,13 @@
 module exchange-rate-receiver
 
-go 1.22.3
+go 1.22
 
 require (
 	github.com/jackc/pgx/v4 v4.18.3
-	github.com/joho/godotenv v1.5.1
 	github.com/spf13/viper v1.18.2
-	go.uber.org/zap v1.21.0
+	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.64.0
-	google.golang.org/protobuf v1.33.0
+	google.golang.org/protobuf v1.34.1
 )
 
 require (
@@ -32,8 +31,7 @@ require (
 	github.com/spf13/cast v1.6.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
-	go.uber.org/atomic v1.9.0 // indirect
-	go.uber.org/multierr v1.9.0 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/crypto v0.21.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
 	golang.org/x/net v0.22.0 // indirect

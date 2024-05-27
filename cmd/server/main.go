@@ -17,7 +17,12 @@ import (
 
 func main() {
 	logger, _ := zap.NewProduction()
-	defer logger.Sync()
+	defer func(logger *zap.Logger) {
+		err := logger.Sync()
+		if err != nil {
+			logger.Fatal("Logger couldn't sync", zap.Error(err))
+		}
+	}(logger)
 
 	cfg, err := config.LoadConfig()
 	if err != nil {
