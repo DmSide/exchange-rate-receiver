@@ -6,7 +6,7 @@ import (
 	"exchange-rate-receiver/internal/models"
 	"exchange-rate-receiver/internal/repository"
 	"net/http"
-	"time"
+	"strconv"
 )
 
 type Service interface {
@@ -27,7 +27,6 @@ func (s *service) GetRates() (*models.Rates, error) {
 		return nil, err
 	}
 
-	rates.Timestamp = time.Now().Format(time.RFC3339)
 	err = s.repo.StoreRates(rates)
 	if err != nil {
 		return nil, err
@@ -37,7 +36,7 @@ func (s *service) GetRates() (*models.Rates, error) {
 }
 
 func fetchRatesFromGarantex() (*models.Rates, error) {
-	resp, err := http.Get("https://garantex.org/api/v2/depth")
+	resp, err := http.Get("https://garantex.org/api/v2/depth?market=usdtrub")
 	if err != nil {
 		return nil, err
 	}
@@ -48,8 +47,9 @@ func fetchRatesFromGarantex() (*models.Rates, error) {
 	}
 
 	var data struct {
-		Asks [][]interface{} `json:"asks"`
-		Bids [][]interface{} `json:"bids"`
+		Asks      [][]interface{} `json:"asks"`
+		Bids      [][]interface{} `json:"bids"`
+		Timestamp int64           `json:"timestamp"`
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
 		return nil, err
@@ -66,7 +66,8 @@ func fetchRatesFromGarantex() (*models.Rates, error) {
 	}
 
 	return &models.Rates{
-		Ask: ask,
-		Bid: bid,
+		Ask:       ask,
+		Bid:       bid,
+		Timestamp: strconv.FormatInt(data.Timestamp, 10),
 	}, nil
 }

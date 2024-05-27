@@ -1,8 +1,6 @@
 .PHONY: build
 build:
-	cd cmd/server
-	go build -o ../../exchange_rate-receiver
-	cd ../..
+	cd cmd/server && go build -o ../../exchange_rate-receiver && cd ../..
 
 .PHONY: test
 test:
