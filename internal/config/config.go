@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
@@ -12,6 +13,12 @@ type Config struct {
 
 func LoadConfig() (*Config, error) {
 	logger, _ := zap.NewProduction()
+	defer logger.Sync()
+
+	// Load .env file
+	if err := godotenv.Load(); err != nil {
+		logger.Warn("No .env file found", zap.Error(err))
+	}
 
 	if err := viper.BindEnv("GRPC_PORT"); err != nil {
 		return nil, err
